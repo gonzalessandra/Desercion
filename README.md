@@ -32,7 +32,7 @@
 
 La deserción escolar es una de las principales barreras para la permanencia en el sistema educativo, y en un departamento con alta ruralidad como el Cauca su incidencia varía mucho entre municipios. La información necesaria para identificar dónde ocurre con más fuerza está repartida en conjuntos de datos distintos (estadísticas por municipio y listado de instituciones) que no están integrados ni listos para consulta.
 
-**Objetivo:** dejar disponible, al final del pipeline, un conjunto de tablas integradas en una base de datos SQL que combine las tasas de deserción, cobertura, aprobación y repitencia de cada municipio del Cauca con las características de su oferta institucional (cantidad de colegios y proporción rural), junto con un nivel de riesgo (alto, medio, bajo). 
+**Objetivo:** dejar disponible, al final del pipeline, un conjunto de tablas integradas en una base de datos SQL que combine las tasas de deserción, cobertura, aprobación y repitencia de cada municipio del Cauca con las características de su oferta institucional (cantidad de colegios y proporción rural), junto con un nivel de riesgo (alto, medio, bajo). Sirve a secretarías de educación y analistas para priorizar municipios y como insumo para análisis o modelos de identificación temprana del riesgo.
 
 ## 2. Fuentes de datos
 
