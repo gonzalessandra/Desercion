@@ -1,0 +1,10 @@
+verificacion,antes,despues
+Instituciones: número de registros,814,814
+Instituciones: registros duplicados,0,0
+Instituciones: nulos en columnas clave,0,0
+Instituciones sin municipio asignado,,0
+Estadísticas: número de registros,15707,42
+Estadísticas: registros duplicados,0,0
+Estadísticas: nulos en columnas clave,142,0
+"Deserción fuera del rango [0, 1]",,0
+Municipios sin instituciones tras el cruce,,0
