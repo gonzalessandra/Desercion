@@ -1,4 +1,4 @@
-# Riesgo de deserción escolar en el Cauca — Pipeline ETL
+# Riesgo de deserción escolar en el Cauca 
 
 > Pipeline que toma dos conjuntos de datos abiertos del MEN (instituciones educativas del Cauca y estadísticas educativas por municipio), los limpia, los cruza y calcula un nivel de riesgo de deserción por municipio, y los deja cargados en una base de datos SQL lista para análisis.
 
@@ -10,8 +10,7 @@
 
 | Nombre | Código | Usuario de GitHub |
 |---|---|---|
-| [Nombre Apellido] | [0000000] | [@usuario] |
-| [Nombre Apellido] | [0000000] | [@usuario] |
+| [Jenny Marcela Candelo] | [22615730] | [@gonzalessandra ] |
 
 ## Tabla de contenido
 
@@ -33,14 +32,14 @@
 
 La deserción escolar es una de las principales barreras para la permanencia en el sistema educativo, y en un departamento con alta ruralidad como el Cauca su incidencia varía mucho entre municipios. La información necesaria para identificar dónde ocurre con más fuerza está repartida en conjuntos de datos distintos (estadísticas por municipio y listado de instituciones) que no están integrados ni listos para consulta.
 
-**Objetivo:** dejar disponible, al final del pipeline, un conjunto de tablas integradas en una base de datos SQL que combine las tasas de deserción, cobertura, aprobación y repitencia de cada municipio del Cauca con las características de su oferta institucional (cantidad de colegios y proporción rural), junto con un nivel de riesgo (alto, medio, bajo). Sirve a secretarías de educación y analistas para priorizar municipios y como insumo para análisis o modelos de identificación temprana del riesgo.
+**Objetivo:** dejar disponible, al final del pipeline, un conjunto de tablas integradas en una base de datos SQL que combine las tasas de deserción, cobertura, aprobación y repitencia de cada municipio del Cauca con las características de su oferta institucional (cantidad de colegios y proporción rural), junto con un nivel de riesgo (alto, medio, bajo). 
 
 ## 2. Fuentes de datos
 
 | Fuente | Tipo (CSV, API, BD, web) | Origen / URL | Tamaño aprox. | Frecuencia de actualización | Licencia |
 |---|---|---|---|---|---|
-| Instituciones Educativas de Cauca | CSV | Datos abiertos del MEN / datos.gov.co [enlace] | 814 filas × 24 columnas (Cauca) | [según el portal] | [licencia indicada en el portal] |
-| MEN – Estadísticas en educación en preescolar, básica y media por municipio | CSV | Datos abiertos del MEN / datos.gov.co [enlace] 15 707 filas × 41 columnas (todo el país); 42 municipios × 41 columnas (Cauca, 2024) | Anual | [licencia indicada en el portal] |
+| Instituciones Educativas de Cauca | CSV | Datos abiertos del MEN / datos.gov.co [[https://www.datos.gov.co/d/rvze-dant](https://www.datos.gov.co/Educaci-n/Instituciones-Educativas-de-Cauca/rvze-dant/about_data)] | 814 filas × 24 columnas (Cauca) | [Anual] | [licencia indicada en el portal] |
+| MEN – Estadísticas en educación en preescolar, básica y media por municipio | CSV | Datos abiertos del MEN / datos.gov.co [https://www.datos.gov.co/Educaci-n/MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR-B-SICA/sras-4t5p/about_data] |15 707 filas × 41 columnas (todo el país); 42 municipios × 41 columnas (Cauca, 2024) | [Anual] | [licencia indicada en el portal] |
 
 ## 3. Arquitectura del pipeline
 
@@ -55,9 +54,9 @@ flowchart LR
     L --> D[(SQLite / PostgreSQL)]
 ```
 
-El flujo es por etapas desacopladas que se comunican a través de archivos: *extract* deja los CSV originales intactos en `data/raw/`, *transform* los lee, los limpia y escribe tablas en `data/processed/`, y *load* lee esas tablas y las carga en la base de datos. Así cada etapa se puede ejecutar y depurar por separado. Se eligió SQLite como destino por defecto porque no requiere credenciales ni servidor y hace el proyecto reproducible; con una variable de entorno se puede cambiar a PostgreSQL sin tocar el código. Las transformaciones reproducen y extienden la limpieza del notebook exploratorio (`notebooks/exploracion_entrega2.ipynb`).
+El flujo es por etapas desacopladas que se comunican a través de archivos: *extract* deja los CSV originales intactos en `data/raw/`, *transform* los lee, los limpia y escribe tablas en `data/processed/`, y *load* lee esas tablas y las carga en la base de datos. Así cada etapa se puede ejecutar y depurar por separado. Se eligió SQLite porque no requiere credenciales ni servidor. Las transformaciones reproducen y extienden la limpieza del notebook exploratorio (`notebooks/exploracion_entrega2.ipynb`).
 
-**Tecnologías:** Python 3.11+, pandas, NumPy, python-dotenv, SQLite (módulo estándar `sqlite3`), SQLAlchemy y psycopg2 (opcionales, para PostgreSQL), Mermaid.
+**Tecnologías:** Python 3.11+, pandas, NumPy, python-dotenv, SQLite, SQLAlchemy y psycopg2, Mermaid.
 
 ## 4. Estructura del repositorio
 
@@ -82,15 +81,15 @@ El flujo es por etapas desacopladas que se comunican a través de archivos: *ext
 ## 5. Requisitos
 
 - Python 3.11 o superior
-- No se necesita ninguna base de datos instalada (SQLite viene con Python); PostgreSQL es opcional
+- No se necesita ninguna base de datos instalada (SQLite viene con Python); 
 - Dependencias listadas en `requirements.txt`
 
 ## 6. Instalación y configuración
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/[usuario]/[repositorio].git
-cd [repositorio]
+git clone https://github.com/[gonzalessandra]/[Desercion-escolar].git
+cd [Desercion-escolar]
 
 # 2. Crear y activar el entorno virtual
 python -m venv .venv
@@ -102,23 +101,16 @@ pip install -r requirements.txt
 
 ### Variables de entorno
 
-Todas son opcionales. Copie `.env.example` como `.env` si desea cambiarlas:
-
 | Variable | Descripción | Ejemplo |
 |---|---|---|
 | `DATABASE_URL` | Base de datos destino. Vacía = SQLite local | `postgresql://etl_user:***@localhost:5432/desercion` |
 | `SQLITE_PATH` | Ruta del archivo SQLite (si no se usa `DATABASE_URL`) | `data/processed/desercion_cauca.db` |
-| `INSTITUCIONES_URL` | URL de descarga del CSV de instituciones | — |
-| `ESTADISTICAS_URL` | URL de descarga del CSV de estadísticas por municipio | — |
+| `INSTITUCIONES_URL` | URL de descarga del CSV de instituciones | https://www.datos.gov.co/Educaci-n/Instituciones-Educativas-de-Cauca/rvze-dant/about_data |
+| `ESTADISTICAS_URL` | URL de descarga del CSV de estadísticas por municipio | https://www.datos.gov.co/Educaci-n/MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR-B-SICA/sras-4t5p/about_data |
 
 ### Obtención de los datos
-
-Los dos CSV están incluidos en `data/raw/` (son livianos). Si no estuvieran, descárguelos del portal de datos abiertos del MEN con estos nombres exactos y cópielos en `data/raw/`:
-
-- `Instituciones_Educativas_de_Cauca.csv`
-- `MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR__BÁSICA_Y_MEDIA_POR_MUNICIPIO.csv`
-
-También puede definir `INSTITUCIONES_URL` y `ESTADISTICAS_URL` en `.env` para que la etapa de extracción los descargue automáticamente.
+Los datos provienen de datos abiertos del Ministerio de Educación Nacional de Colombia, publicados en datos.gov.co: el listado de Instituciones Educativas de Cauca y las Estadísticas en educación en preescolar, básica y media por municipio. Son archivos CSV de acceso público y agregados por municipio, sin datos personales de estudiantes.
+Los dos CSV están incluidos en `data/raw/`
 
 ## 7. Ejecución
 
@@ -144,24 +136,24 @@ Opcional: `python docs/generar_grafico.py` regenera la gráfica de resultados `d
 
 ### 8.1 Extract
 
-- **Qué hace:** verifica que los dos CSV existan en `data/raw/` (los descarga si se configuró una URL) y valida que contengan las columnas necesarias. No modifica los datos originales.
+- **Qué hace:** verifica que los dos CSV existan en `data/raw/` y valida que contengan las columnas necesarias. No modifica los datos originales.
 - **Scripts:** `extract/extract.py`
-- **Salida:** `data/raw/Instituciones_Educativas_de_Cauca.csv` y `data/raw/MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR__BÁSICA_Y_MEDIA_POR_MUNICIPIO.csv`
+- **Salida:** `data/raw/Instituciones_Educativas_de_Cauca.csv` y `data/raw/MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR__BASICA_Y_MEDIA_POR_MUNICIPIO.csv`
 
 ### 8.2 Transform
 
-- **Qué hace:** filtra el Cauca (y el año 2024 en las estadísticas), convierte a número las tasas que vienen como texto, unifica los valores de zona, cruza instituciones con municipios, resume la oferta institucional y calcula el nivel de riesgo de deserción.
+- **Qué hace:** filtra el Cauca y el año 2024 en las estadísticas, convierte a número las tasas que vienen como texto, unifica los valores de zona, cruza instituciones con municipios, resume la oferta institucional y calcula el nivel de riesgo de deserción.
 - **Scripts:** `transform/transform.py`
 - **Salida:** `data/processed/*.csv`
 
 | # | Transformación | Justificación |
 |---|---|---|
 | 1 | Filtro de departamento Cauca y año 2024 | Los archivos fuente cubren más territorio y años que el alcance del proyecto. |
-| 2 | Eliminación de duplicados por `codigoestablecimiento` y por (`AÑO`, `CÓDIGO_MUNICIPIO`) | Evita contar dos veces una institución o un municipio. |
-| 3 | Conversión de texto a número en 33 columnas (`"13,06%"` → `0.1306`) | Las tasas llegan como texto con coma decimal y signo %; sin convertirlas no se pueden agregar ni comparar. Si la columna no trae %, solo se convierte la coma (p. ej. tamaño promedio de grupo). |
+| 2 | Eliminación de duplicados por `codigoestablecimiento` y por `AÑO`, `CÓDIGO_MUNICIPIO` | Evita contar dos veces una institución o un municipio. |
+| 3 | Conversión de texto a número en 33 columnas (`"13,06%"` → `0.1306`) | Las tasas llegan como texto con coma decimal y signo %; sin convertirlas no se pueden agregar ni comparar. Si la columna no trae %, solo se convierte la coma. |
 | 4 | Unificación de `URBANA,RURAL` y `RURAL,URBANA` en `URBANA-RURAL` | Son la misma categoría escrita en distinto orden. |
-| 5 | Nombres de columnas a minúsculas, sin tildes ni espacios | Evita problemas con caracteres especiales (`ñ`, tildes) en bases de datos como PostgreSQL. |
-| 6 | Código de municipio de cada institución, cruzando por nombre normalizado (sin tildes, mayúsculas) y usando el código del establecimiento solo como respaldo | El código del establecimiento no es confiable para ubicar el municipio: en 28 instituciones conserva el municipio de origen (p. ej. las de Sucre traen el código de Bolívar y las de Guachené el de Caloto). |
+| 5 | Nombres de columnas a minúsculas, sin tildes ni espacios | Evita problemas con caracteres especiales . |
+| 6 | Código de municipio de cada institución, cruzando por nombre normalizado y usando el código del establecimiento solo como respaldo | El código del establecimiento no es confiable para ubicar el municipio: en 28 instituciones conserva el municipio de origen (p. ej. las de Sucre traen el código de Bolívar y las de Guachené el de Caloto). |
 | 7 | Resumen por municipio: total de instituciones, rurales, urbanas, mixtas y % rural | Integra la oferta institucional con las estadísticas educativas. |
 | 8 | Nivel de riesgo: `ALTO` si la deserción está en el percentil 75 o más, `MEDIO` si está en el percentil 50 o más, `BAJO` en otro caso | Clasificación relativa y simple para priorizar municipios; los umbrales se cambian en `config.py`. |
 
@@ -169,7 +161,7 @@ Opcional: `python docs/generar_grafico.py` regenera la gráfica de resultados `d
 
 - **Qué hace:** lee las tablas de `data/processed/` y las carga en la base de datos con reemplazo completo en cada ejecución; después verifica con `COUNT(*)` que las filas cargadas coinciden con las del archivo.
 - **Scripts:** `load/load.py`
-- **Destino:** base de datos SQLite (`data/processed/desercion_cauca.db`) o PostgreSQL si se define `DATABASE_URL`.
+- **Destino:** base de datos SQLite (`data/processed/desercion_cauca.db`).
 
 ## 9. Modelo y diccionario de datos
 
@@ -272,5 +264,6 @@ GROUP BY riesgo_desercion;
 ## 13. Referencias
 
 - Ministerio de Educación Nacional de Colombia, datos abiertos: https://www.mineducacion.gov.co/portal/estadisticas/datos-abiertos-men/
-- Conjuntos de datos "Instituciones Educativas de Cauca" y "MEN Estadísticas en educación en preescolar, básica y media por municipio" — [enlaces a datos.gov.co].
-- Uso de IA generativa: se usó Claude (Anthropic) para estructurar el repositorio a partir del notebook de la entrega 2, redactar los scripts de extracción, transformación y carga, y el borrador de este README. [Ajustar según el uso real del equipo.]
+- Conjuntos de datos "Instituciones Educativas de Cauca": https://www.datos.gov.co/Educaci-n/Instituciones-Educativas-de-Cauca/rvze-dant/about_data
+-  Conjuntos de datos "MEN Estadísticas en educación en preescolar, básica y media por municipio": https://www.datos.gov.co/Educaci-n/MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR-B-SICA/sras-4t5p/about_data
+- Uso de IA generativa: se usó Claude para estructurar el repositorio a partir del notebook de la entrega 2 y el borrador de este README.

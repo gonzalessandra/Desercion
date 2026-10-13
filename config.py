@@ -12,7 +12,7 @@ PROCESSED_DIR = ROOT / "data" / "processed"
 
 # Archivos de entrada (se esperan en data/raw/)
 INSTITUCIONES_FILE = "Instituciones_Educativas_de_Cauca.csv"
-ESTADISTICAS_FILE = "MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR__BÁSICA_Y_MEDIA_POR_MUNICIPIO.csv"
+ESTADISTICAS_FILE = "MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR__BASICA_Y_MEDIA_POR_MUNICIPIO.csv"
 
 # URLs opcionales de descarga (si el archivo no está en data/raw/)
 INSTITUCIONES_URL = os.getenv("INSTITUCIONES_URL")
